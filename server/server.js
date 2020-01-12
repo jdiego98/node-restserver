@@ -1,9 +1,11 @@
 require('./config/config');
 
-const express = require('express')
+const express = require('express');
 const app = express();
 
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -11,46 +13,51 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/usuarios', function(req, res) {
-    res.json('get Usuario')
+app.use(require('./routes/usuarios'));
+
+/*
+===============================================================
+app.use(require('./route/usuarios)); debe de ir despues del app.use(bodyParser.urlencoded({ extended: false }))
+y el app.use(require('./routes/usuarios')); para que asi el app al usar las rutas de usuario pueda hacer uso
+del body parser
+
+===============================================================
+*/
+
+/*
+mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
+
+    if (err) throw err;
+
+    console.log('Base de datos ONLINE');
+
+});
+*/
+
+// mongoose.connect('mongodb://localhost/cafe', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify:false,
+// }, (err, res) => {
+ 
+//     if(err) throw new Error('Conexion a base de datos fallida');
+ 
+//     console.log('Conexión a base de datos exitosa');
+// });
+
+
+mongoose.connect(process.env.URLDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+}).then(resp => {
+    console.log('Base de datos ONLINE');
+}).catch(err => {
+
+    console.log(err);
+
 });
 
-app.post('/usuarios', function(req, res) {
-
-    let body = req.body;
-
-    if (body.nombre === undefined) {
-
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario'
-
-        })
-
-    } else {
-
-
-    }
-
-    res.json({
-        persona: body
-    })
-});
-
-app.put('/usuarios/:id', function(req, res) {
-
-    let id = req.params.id;
-
-    res.json({
-        id
-    })
-});
-
-app.delete('/usuarios', function(req, res) {
-    res.json('delete Usuario')
-});
 
 app.listen(process.env.PORT, () => {
 
-    console.log("Escucando puerto: ", 3000);
+    console.log("Escucando puerto: ", process.env.PORT);
 });
