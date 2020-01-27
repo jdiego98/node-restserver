@@ -13,7 +13,35 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(require('./routes/usuarios'));
+
+
+//Configuracion global de rutas
+app.use(require('./routes/index'));
+
+
+
+mongoose.connect(process.env.URLDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+}).then(resp => {
+    console.log('Base de datos ONLINE');
+}).catch(err => {
+
+    console.log(err);
+
+});
+
+
+app.listen(process.env.PORT, () => {
+
+    console.log("Escucando puerto: ", process.env.PORT);
+});
+
+
+
+
 
 /*
 ===============================================================
@@ -42,22 +70,3 @@ mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
 //     console.log('Conexión a base de datos exitosa');
 // });
 
-
-mongoose.connect(process.env.URLDB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-}).then(resp => {
-    console.log('Base de datos ONLINE');
-}).catch(err => {
-
-    console.log(err);
-
-});
-
-
-app.listen(process.env.PORT, () => {
-
-    console.log("Escucando puerto: ", process.env.PORT);
-});
