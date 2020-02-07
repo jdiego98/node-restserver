@@ -37,8 +37,15 @@ let urlDB;
 if( process.env.NODE_ENV === 'dev'){
    urlDB = 'mongodb://localhost/cafe';
 }else {
-    urlDB = 'mongodb+srv://jdiego:E2KkgAMCrXFc87nZ@cluster0-yvtcg.mongodb.net/test?retryWrites=true&w=majority'; // deberia de ir el nombre de la base de datos enves de test!!
+    urlDB = process.env.MONGO_URI;
 }
 
 process.env.URLDB = urlDB;
+
+
+//==========================
+// Google Client ID
+//==========================
+
+process.env.CLIENT_ID = process.env.CLIENT_ID || '793542702506-sn9vit6l8gh62idv6d9qdh0a5mf83l5a.apps.googleusercontent.com';
 
