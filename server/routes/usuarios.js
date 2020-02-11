@@ -31,8 +31,7 @@ app.get('/usuarios', verificaToken,(req, res) => {
                     err
                 });
 
-            }
-        
+            }        
             
 
             Usuario.count({estado: true}, (err, conteo) =>{
